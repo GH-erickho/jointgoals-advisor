@@ -8,6 +8,16 @@ function EditProfile() {
   const [household, setHousehold] = useState({});
   const [financialGoals, setFinancialGoals] = useState([]);
   const [lifeGoals, setLifeGoals] = useState([]);
+  const [incomes, setIncomes] = useState([]);
+  const [realEstate, setRealEstate] = useState([]);
+  const [savings, setSavings] = useState([]);
+  const [expenses, setExpenses] = useState([]);
+  const [debts, setDebts] = useState([]);
+  const [focuses, setFocuses] = useState([]);
+  const [opportunities, setOpportunities] = useState([]);
+  const [topJointGoals, setTopJointGoals] = useState([]);
+  const [goalWhats, setGoalWhats] = useState([]);
+  const [actionResults, setActionResults] = useState([]);
 
   useEffect(() => {
     async function fetchHousehold() {
@@ -28,14 +38,98 @@ function EditProfile() {
     }
     fetchFinancialGoals();
 
-    async function fetchFinancialGoals() {
+    async function fetchLifeGoals() {
       const res = await fetch(
-        `http://localhost:8000/financial-goals?precisefp_account_id=${precisefp_account_id}`
+        `http://localhost:8000/life-goals?precisefp_account_id=${precisefp_account_id}`
       );
       const data = await res.json();
-      setFinancialGoals(data);
+      setLifeGoals(data);
     }
-    fetchFinancialGoals();
+    fetchLifeGoals();
+
+    async function fetchIncomes() {
+      const res = await fetch(
+        `http://localhost:8000/incomes?precisefp_account_id=${precisefp_account_id}`
+      );
+      const data = await res.json();
+      setIncomes(data);
+    }
+    fetchIncomes();
+
+    async function fetchRealEstate() {
+      const res = await fetch(
+        `http://localhost:8000/real-estate?precisefp_account_id=${precisefp_account_id}`
+      );
+      const data = await res.json();
+      setRealEstate(data);
+    }
+    fetchRealEstate();
+
+    async function fetchSavings() {
+      const res = await fetch(
+        `http://localhost:8000/savings?precisefp_account_id=${precisefp_account_id}`
+      );
+      const data = await res.json();
+      setSavings(data);
+    }
+    fetchSavings();
+
+    async function fetchExpenses() {
+      const res = await fetch(
+        `http://localhost:8000/expense?precisefp_account_id=${precisefp_account_id}`
+      );
+      const data = await res.json();
+      setExpenses(data);
+    }
+    fetchExpenses();
+
+    async function fetchDebts() {
+      const res = await fetch(
+        `http://localhost:8000/debts?precisefp_account_id=${precisefp_account_id}`
+      );
+      const data = await res.json();
+      setDebts(data);
+    }
+    fetchDebts();
+
+    async function fetchFocuses() {
+      const res = await fetch(
+        `http://localhost:8000/focuses?precisefp_account_id=${precisefp_account_id}`
+      );
+      const data = await res.json();
+      setFocuses(data);
+    }
+    fetchFocuses();
+
+    async function fetchOpportunities() {
+      const res = await fetch(
+        `http://localhost:8000/opportunities?precisefp_account_id=${precisefp_account_id}`
+      );
+      const data = await res.json();
+      setOpportunities(data);
+    }
+    fetchOpportunities();
+
+    async function fetchTopJointGoals() {
+      const resTopJointGoals = await fetch(
+        `http://localhost:8000/top-joint-goals?precisefp_account_id=${precisefp_account_id}`
+      );
+      const dataTopJointGoals = await resTopJointGoals.json();
+      setTopJointGoals(dataTopJointGoals);
+      dataTopJointGoals.forEach(async (goal) => {
+        const resGoalWhats = await fetch(
+          `http://localhost:8000/goal-whats?precisefp_account_id=${precisefp_account_id}&goal_index=${goal.index}`
+        );
+        const dataGoalWhats = await resGoalWhats.json();
+        setGoalWhats([...goalWhats, dataGoalWhats]);
+        const resActionResults = await fetch(
+          `http://localhost:8000/goal-action-results?precisefp_account_id=${precisefp_account_id}&goal_index=${goal.index}`
+        );
+        const dataActionResults = await resActionResults.json();
+        setActionResults([...actionResults, dataActionResults]);
+      });
+    }
+    fetchTopJointGoals();
   }, [precisefp_account_id]);
 
   return (
@@ -442,7 +536,6 @@ function EditProfile() {
             Add Financial Goal
           </Button>
         </div>
-
         <Row>
           <div
             style={{
@@ -456,10 +549,10 @@ function EditProfile() {
               className="w-100"
               onClick={async () => {
                 const res = await fetch(
-                  `http://localhost:8000/household?precisefp_account_id=${precisefp_account_id}`
+                  `http://localhost:8000/financial-goals?precisefp_account_id=${precisefp_account_id}`
                 );
                 const data = await res.json();
-                setHousehold(data);
+                setFinancialGoals(data);
               }}
             >
               Cancel
@@ -467,7 +560,7 @@ function EditProfile() {
             <Button
               className="w-100"
               onClick={() => {
-                console.log(JSON.stringify(financialGoals))
+                console.log(JSON.stringify(financialGoals));
                 fetch("http://localhost:8000/financial-goals", {
                   method: "PUT",
                   headers: {
@@ -483,6 +576,752 @@ function EditProfile() {
           </div>
         </Row>
       </Stack>
+      <Stack gap={3} className="p-3 my-2" style={{ border: "1px solid black" }}>
+        <h2>Life Goals</h2>
+        {lifeGoals?.map((goal, i) => {
+          return (
+            <Row key={`lifeGoal${i}`} className="align-items-center">
+              <Form.Group as={Col} controlId="formGridLifeGoalName">
+                <Form.Label>Statement</Form.Label>
+                <Form.Control
+                  value={goal.statement || ""}
+                  onChange={(e) => {
+                    const newGoal = { ...goal, statement: e.target.value };
+                    setLifeGoals([
+                      ...lifeGoals.slice(0, i),
+                      newGoal,
+                      ...lifeGoals.slice(i + 1),
+                    ]);
+                  }}
+                  placeholder="Statement"
+                />
+              </Form.Group>
+              <Col className="col-2">
+                <Button
+                  onClick={() =>
+                    setLifeGoals([
+                      ...lifeGoals.slice(0, i),
+                      ...lifeGoals.slice(i + 1),
+                    ])
+                  }
+                >
+                  Delete Goal
+                </Button>
+              </Col>
+            </Row>
+          );
+        })}
+        <div style={{ marginLeft: "auto" }}>
+          <Button
+            onClick={() =>
+              setLifeGoals([
+                ...lifeGoals,
+                { statement: "", precisefp_account_id },
+              ])
+            }
+          >
+            Add Life Goal
+          </Button>
+        </div>
+        <Row>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              gap: "20px",
+            }}
+          >
+            <Button
+              variant="secondary"
+              className="w-100"
+              onClick={async () => {
+                const res = await fetch(
+                  `http://localhost:8000/life-goals?precisefp_account_id=${precisefp_account_id}`
+                );
+                const data = await res.json();
+                setLifeGoals(data);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="w-100"
+              onClick={() => {
+                console.log(JSON.stringify(lifeGoals));
+                fetch("http://localhost:8000/life-goals", {
+                  method: "PUT",
+                  headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(lifeGoals),
+                });
+              }}
+            >
+              Save
+            </Button>
+          </div>
+        </Row>
+      </Stack>
+      <Stack gap={3} className="p-3 my-2" style={{ border: "1px solid black" }}>
+        <h2>Incomes</h2>
+        {incomes?.map((income, i) => {
+          return (
+            <Row key={`income${i}`} className="align-items-center">
+              <Form.Group as={Col} controlId="formGridIncomeName">
+                <Form.Label>Name</Form.Label>
+                <Form.Control
+                  value={income.name || ""}
+                  onChange={(e) => {
+                    const newIncome = { ...income, name: e.target.value };
+                    setIncomes([
+                      ...incomes.slice(0, i),
+                      newIncome,
+                      ...incomes.slice(i + 1),
+                    ]);
+                  }}
+                  placeholder="Name"
+                />
+              </Form.Group>
+              <Form.Group
+                as={Col}
+                controlId="formGridFinancialGoalAmount"
+                className="col-2"
+                style={{ padding: 0 }}
+              >
+                <Form.Label>Amount</Form.Label>
+                <Form.Control
+                  value={income.amount || ""}
+                  type="number"
+                  onChange={(e) => {
+                    const newIncome = { ...income, amount: e.target.value };
+                    setIncomes([
+                      ...incomes.slice(0, i),
+                      newIncome,
+                      ...incomes.slice(i + 1),
+                    ]);
+                  }}
+                  placeholder="Amount"
+                />
+              </Form.Group>
+              <Col className="col-2">
+                <Button
+                  onClick={() =>
+                    setIncomes([
+                      ...incomes.slice(0, i),
+                      ...incomes.slice(i + 1),
+                    ])
+                  }
+                >
+                  Delete Income
+                </Button>
+              </Col>
+            </Row>
+          );
+        })}
+        <div style={{ marginLeft: "auto" }}>
+          <Button
+            onClick={() =>
+              setIncomes([
+                ...incomes,
+                { name: "", amount: 0, precisefp_account_id },
+              ])
+            }
+          >
+            Add Income
+          </Button>
+        </div>
+        <Row>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              gap: "20px",
+            }}
+          >
+            <Button
+              variant="secondary"
+              className="w-100"
+              onClick={async () => {
+                const res = await fetch(
+                  `http://localhost:8000/incomes?precisefp_account_id=${precisefp_account_id}`
+                );
+                const data = await res.json();
+                setIncomes(data);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="w-100"
+              onClick={() => {
+                fetch("http://localhost:8000/incomes", {
+                  method: "PUT",
+                  headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(incomes),
+                });
+              }}
+            >
+              Save
+            </Button>
+          </div>
+        </Row>
+      </Stack>
+      <Stack gap={3} className="p-3 my-2" style={{ border: "1px solid black" }}>
+        <h2>Real Estate</h2>
+        {realEstate?.map((place, i) => {
+          return (
+            <div
+              key={`income${i}`}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 20,
+              }}
+            >
+              <Stack gap={3}>
+                <Row>
+                  <Form.Group as={Col} controlId="formGridRealEstateName">
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control
+                      value={place.name || ""}
+                      onChange={(e) => {
+                        const newIncome = { ...place, name: e.target.value };
+                        setIncomes([
+                          ...incomes.slice(0, i),
+                          newIncome,
+                          ...incomes.slice(i + 1),
+                        ]);
+                      }}
+                      placeholder="Name"
+                    />
+                  </Form.Group>
+                  <Form.Group as={Col} controlId="formGridRealEstateType">
+                    <Form.Label>Type</Form.Label>
+                    <Form.Select aria-label="Real Estate Type">
+                      <option
+                        value="Primary"
+                        onSelect={() => {
+                          const newPlace = { ...place, type: "Primary" };
+                          setRealEstate([
+                            ...realEstate.slice(0, i),
+                            newPlace,
+                            ...realEstate.slice(i + 1),
+                          ]);
+                        }}
+                      >
+                        Primary
+                      </option>
+                      <option
+                        value="Secondary"
+                        onSelect={() => {
+                          const newPlace = { ...place, type: "Secondary" };
+                          setRealEstate([
+                            ...realEstate.slice(0, i),
+                            newPlace,
+                            ...realEstate.slice(i + 1),
+                          ]);
+                        }}
+                      >
+                        Secondary
+                      </option>
+                      <option
+                        value="Investment"
+                        onSelect={() => {
+                          const newPlace = { ...place, type: "Investment" };
+                          setRealEstate([
+                            ...realEstate.slice(0, i),
+                            newPlace,
+                            ...realEstate.slice(i + 1),
+                          ]);
+                        }}
+                      >
+                        Investment
+                      </option>
+                    </Form.Select>
+                  </Form.Group>
+                  <Form.Group
+                    as={Col}
+                    controlId="formGridRealEstateValue"
+                    className="col-2"
+                    style={{ padding: 0 }}
+                  >
+                    <Form.Label>Value</Form.Label>
+                    <Form.Control
+                      value={place.value || ""}
+                      type="number"
+                      onChange={(e) => {
+                        const newPlace = { ...place, value: e.target.value };
+                        setRealEstate([
+                          ...realEstate.slice(0, i),
+                          newPlace,
+                          ...realEstate.slice(i + 1),
+                        ]);
+                      }}
+                      placeholder="Value"
+                    />
+                  </Form.Group>
+                  <Form.Group as={Col} controlId="formGridRealEstateOwner">
+                    <Form.Label>Owner</Form.Label>
+                    <Form.Control
+                      value={place.owner || ""}
+                      onChange={(e) => {
+                        const newPlace = { ...place, owner: e.target.value };
+                        setRealEstate([
+                          ...realEstate.slice(0, i),
+                          newPlace,
+                          ...realEstate.slice(i + 1),
+                        ]);
+                      }}
+                      placeholder="Owner"
+                    />
+                  </Form.Group>
+                </Row>
+                <Row>
+                  <Form.Group
+                    as={Col}
+                    controlId="formGridRealEstateMortgageBalance"
+                  >
+                    <Form.Label>Mortgage Balance</Form.Label>
+                    <Form.Control
+                      value={place.mortgage_balance || ""}
+                      type="number"
+                      onChange={(e) => {
+                        const newPlace = {
+                          ...place,
+                          mortgage_balance: e.target.value,
+                        };
+                        setRealEstate([
+                          ...realEstate.slice(0, i),
+                          newPlace,
+                          ...realEstate.slice(i + 1),
+                        ]);
+                      }}
+                      placeholder="Mortgage Balance"
+                    />
+                  </Form.Group>
+                  <Form.Group
+                    as={Col}
+                    controlId="formGridRealEstateMonthlyPayment"
+                  >
+                    <Form.Label>Monthly Payment</Form.Label>
+                    <Form.Control
+                      value={place.monthly_payment || ""}
+                      type="number"
+                      onChange={(e) => {
+                        const newPlace = {
+                          ...place,
+                          monthly_payment: e.target.value,
+                        };
+                        setRealEstate([
+                          ...realEstate.slice(0, i),
+                          newPlace,
+                          ...realEstate.slice(i + 1),
+                        ]);
+                      }}
+                      placeholder="Monthly Payment"
+                    />
+                  </Form.Group>
+                  <Form.Group
+                    as={Col}
+                    controlId="formGridRealEstateInterestRate"
+                  >
+                    <Form.Label>Interest Rate</Form.Label>
+                    <Form.Control
+                      value={place.interest_rate || ""}
+                      type="number"
+                      onChange={(e) => {
+                        const newPlace = {
+                          ...place,
+                          interest_rate: e.target.value,
+                        };
+                        setRealEstate([
+                          ...realEstate.slice(0, i),
+                          newPlace,
+                          ...realEstate.slice(i + 1),
+                        ]);
+                      }}
+                      placeholder="Interest Rate"
+                    />
+                  </Form.Group>
+                  <Form.Group as={Col} controlId="formGridRealEstateDuration">
+                    <Form.Label>Duration</Form.Label>
+                    <Form.Control
+                      value={place.duration || ""}
+                      type="number"
+                      onChange={(e) => {
+                        const newPlace = {
+                          ...place,
+                          duration: e.target.value,
+                        };
+                        setRealEstate([
+                          ...realEstate.slice(0, i),
+                          newPlace,
+                          ...realEstate.slice(i + 1),
+                        ]);
+                      }}
+                      placeholder="Duration"
+                    />
+                  </Form.Group>
+                </Row>
+              </Stack>
+              <Col className="col-2">
+                <Button
+                  onClick={() =>
+                    setIncomes([
+                      ...incomes.slice(0, i),
+                      ...incomes.slice(i + 1),
+                    ])
+                  }
+                >
+                  Delete Place
+                </Button>
+              </Col>
+            </div>
+          );
+        })}
+        <div style={{ marginLeft: "auto" }}>
+          <Button
+            onClick={() =>
+              setRealEstate([
+                ...realEstate,
+                {
+                  name: "",
+                  type: "Secondary",
+                  value: 0,
+                  owner: "",
+                  mortgage_balance: 0,
+                  monthly_payment: 0,
+                  interest_rate: 0,
+                  duration: 0,
+                  precisefp_account_id,
+                },
+              ])
+            }
+          >
+            Add Place
+          </Button>
+        </div>
+        <Row>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              gap: "20px",
+            }}
+          >
+            <Button
+              variant="secondary"
+              className="w-100"
+              onClick={async () => {
+                const res = await fetch(
+                  `http://localhost:8000/real-estate?precisefp_account_id=${precisefp_account_id}`
+                );
+                const data = await res.json();
+                setRealEstate(data);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="w-100"
+              onClick={() => {
+                fetch("http://localhost:8000/real-estate", {
+                  method: "PUT",
+                  headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(realEstate),
+                });
+              }}
+            >
+              Save
+            </Button>
+          </div>
+        </Row>
+      </Stack>
+
+      <Stack gap={3} className="p-3 my-2" style={{ border: "1px solid black" }}>
+        <h2>Savings</h2>
+        {savings?.map((saving, i) => {
+          return (
+            <div
+              key={`income${i}`}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                gap: 20,
+              }}
+            >
+              <Stack gap={3}>
+                <Row>
+                  <Form.Group as={Col} controlId="formGridRealEstateName">
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control
+                      value={saving.name || ""}
+                      onChange={(e) => {
+                        const newIncome = { ...saving, name: e.target.value };
+                        setIncomes([
+                          ...incomes.slice(0, i),
+                          newIncome,
+                          ...incomes.slice(i + 1),
+                        ]);
+                      }}
+                      placeholder="Name"
+                    />
+                  </Form.Group>
+                  <Form.Group as={Col} controlId="formGridRealEstateType">
+                    <Form.Label>Type</Form.Label>
+                    <Form.Select aria-label="Real Estate Type">
+                      <option
+                        value="Primary"
+                        onSelect={() => {
+                          const newPlace = { ...saving, type: "Primary" };
+                          setRealEstate([
+                            ...realEstate.slice(0, i),
+                            newPlace,
+                            ...realEstate.slice(i + 1),
+                          ]);
+                        }}
+                      >
+                        Primary
+                      </option>
+                      <option
+                        value="Secondary"
+                        onSelect={() => {
+                          const newPlace = { ...saving, type: "Secondary" };
+                          setRealEstate([
+                            ...realEstate.slice(0, i),
+                            newPlace,
+                            ...realEstate.slice(i + 1),
+                          ]);
+                        }}
+                      >
+                        Secondary
+                      </option>
+                      <option
+                        value="Investment"
+                        onSelect={() => {
+                          const newPlace = { ...saving, type: "Investment" };
+                          setRealEstate([
+                            ...realEstate.slice(0, i),
+                            newPlace,
+                            ...realEstate.slice(i + 1),
+                          ]);
+                        }}
+                      >
+                        Investment
+                      </option>
+                    </Form.Select>
+                  </Form.Group>
+                  <Form.Group
+                    as={Col}
+                    controlId="formGridRealEstateValue"
+                    className="col-2"
+                    style={{ padding: 0 }}
+                  >
+                    <Form.Label>Value</Form.Label>
+                    <Form.Control
+                      value={saving.value || ""}
+                      type="number"
+                      onChange={(e) => {
+                        const newPlace = { ...saving, value: e.target.value };
+                        setRealEstate([
+                          ...realEstate.slice(0, i),
+                          newPlace,
+                          ...realEstate.slice(i + 1),
+                        ]);
+                      }}
+                      placeholder="Value"
+                    />
+                  </Form.Group>
+                  <Form.Group as={Col} controlId="formGridRealEstateOwner">
+                    <Form.Label>Owner</Form.Label>
+                    <Form.Control
+                      value={saving.owner || ""}
+                      onChange={(e) => {
+                        const newPlace = { ...saving, owner: e.target.value };
+                        setRealEstate([
+                          ...realEstate.slice(0, i),
+                          newPlace,
+                          ...realEstate.slice(i + 1),
+                        ]);
+                      }}
+                      placeholder="Owner"
+                    />
+                  </Form.Group>
+                </Row>
+                <Row>
+                  <Form.Group
+                    as={Col}
+                    controlId="formGridRealEstateMortgageBalance"
+                  >
+                    <Form.Label>Mortgage Balance</Form.Label>
+                    <Form.Control
+                      value={saving.mortgage_balance || ""}
+                      type="number"
+                      onChange={(e) => {
+                        const newPlace = {
+                          ...saving,
+                          mortgage_balance: e.target.value,
+                        };
+                        setRealEstate([
+                          ...realEstate.slice(0, i),
+                          newPlace,
+                          ...realEstate.slice(i + 1),
+                        ]);
+                      }}
+                      placeholder="Mortgage Balance"
+                    />
+                  </Form.Group>
+                  <Form.Group
+                    as={Col}
+                    controlId="formGridRealEstateMonthlyPayment"
+                  >
+                    <Form.Label>Monthly Payment</Form.Label>
+                    <Form.Control
+                      value={saving.monthly_payment || ""}
+                      type="number"
+                      onChange={(e) => {
+                        const newPlace = {
+                          ...saving,
+                          monthly_payment: e.target.value,
+                        };
+                        setRealEstate([
+                          ...realEstate.slice(0, i),
+                          newPlace,
+                          ...realEstate.slice(i + 1),
+                        ]);
+                      }}
+                      placeholder="Monthly Payment"
+                    />
+                  </Form.Group>
+                  <Form.Group
+                    as={Col}
+                    controlId="formGridRealEstateInterestRate"
+                  >
+                    <Form.Label>Interest Rate</Form.Label>
+                    <Form.Control
+                      value={saving.interest_rate || ""}
+                      type="number"
+                      onChange={(e) => {
+                        const newPlace = {
+                          ...saving,
+                          interest_rate: e.target.value,
+                        };
+                        setRealEstate([
+                          ...realEstate.slice(0, i),
+                          newPlace,
+                          ...realEstate.slice(i + 1),
+                        ]);
+                      }}
+                      placeholder="Interest Rate"
+                    />
+                  </Form.Group>
+                  <Form.Group as={Col} controlId="formGridRealEstateDuration">
+                    <Form.Label>Duration</Form.Label>
+                    <Form.Control
+                      value={saving.duration || ""}
+                      type="number"
+                      onChange={(e) => {
+                        const newPlace = {
+                          ...saving,
+                          duration: e.target.value,
+                        };
+                        setRealEstate([
+                          ...realEstate.slice(0, i),
+                          newPlace,
+                          ...realEstate.slice(i + 1),
+                        ]);
+                      }}
+                      placeholder="Duration"
+                    />
+                  </Form.Group>
+                </Row>
+              </Stack>
+              <Col className="col-2">
+                <Button
+                  onClick={() =>
+                    setIncomes([
+                      ...incomes.slice(0, i),
+                      ...incomes.slice(i + 1),
+                    ])
+                  }
+                >
+                  Delete Place
+                </Button>
+              </Col>
+            </div>
+          );
+        })}
+        <div style={{ marginLeft: "auto" }}>
+          <Button
+            onClick={() =>
+              setRealEstate([
+                ...realEstate,
+                {
+                  name: "",
+                  type: "Secondary",
+                  value: 0,
+                  owner: "",
+                  mortgage_balance: 0,
+                  monthly_payment: 0,
+                  interest_rate: 0,
+                  duration: 0,
+                  precisefp_account_id,
+                },
+              ])
+            }
+          >
+            Add Place
+          </Button>
+        </div>
+        <Row>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              gap: "20px",
+            }}
+          >
+            <Button
+              variant="secondary"
+              className="w-100"
+              onClick={async () => {
+                const res = await fetch(
+                  `http://localhost:8000/real-estate?precisefp_account_id=${precisefp_account_id}`
+                );
+                const data = await res.json();
+                setRealEstate(data);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="w-100"
+              onClick={() => {
+                fetch("http://localhost:8000/real-estate", {
+                  method: "PUT",
+                  headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(realEstate),
+                });
+              }}
+            >
+              Save
+            </Button>
+          </div>
+        </Row>
+      </Stack>
+
     </div>
   );
 }
