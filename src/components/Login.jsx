@@ -44,7 +44,7 @@ const Login = () => {
 
   return (
     <DivMargin>
-      <p>听写 Admin</p>
+      <p>JointGoals Admin</p>
       <form>
         <DivMarginBottom>
           <LabelMarginRight htmlFor="email-address">
