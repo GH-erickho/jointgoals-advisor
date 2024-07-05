@@ -17,21 +17,23 @@ const Login = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        user
-          .getIdToken(true)
-          .then((token) => {
-            fetch(`${getHost()}tokens`, {
-              method: "PUT",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                email: user.email,
-                token,
-              }),
-            }).then(() => navigate("/", { state: { token } }));
-          })
-          .catch((error) => console.error(error));
+        navigate("/")
+        // todo: Implement API protection.
+        // user
+        //   .getIdToken(true)
+        //   .then((token) => {
+        //     fetch(`${getHost()}tokens`, {
+        //       method: "PUT",
+        //       headers: {
+        //         "Content-Type": "application/json",
+        //       },
+        //       body: JSON.stringify({
+        //         email: user.email,
+        //         token,
+        //       }),
+        //     }).then(() => navigate("/", { state: { token } }));
+        //   })
+        //   .catch((error) => console.error(error));
       })
       .catch((error) => {
         const errorCode = error.code;
