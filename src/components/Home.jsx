@@ -3,8 +3,6 @@ import { Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 function Home() {
-  const [count, setCount] = useState(0);
-
   const [couples, setCouples] = useState([]);
   useEffect(() => {
     async function fetchData() {
@@ -13,7 +11,7 @@ function Home() {
       setCouples(data);
     }
     fetchData();
-  }, [couples]);
+  }, []);
 
   console.log(couples);
 
