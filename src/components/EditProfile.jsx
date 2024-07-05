@@ -22,7 +22,7 @@ function EditProfile() {
   useEffect(() => {
     async function fetchHousehold() {
       const res = await fetch(
-        `http://localhost:8000/household?precisefp_account_id=${precisefp_account_id}`
+        `https://jointgoals.vercel.app//household?precisefp_account_id=${precisefp_account_id}`
       );
       const data = await res.json();
       setHousehold(data);
@@ -31,7 +31,7 @@ function EditProfile() {
 
     async function fetchFinancialGoals() {
       const res = await fetch(
-        `http://localhost:8000/financial-goals?precisefp_account_id=${precisefp_account_id}`
+        `https://jointgoals.vercel.app//financial-goals?precisefp_account_id=${precisefp_account_id}`
       );
       const data = await res.json();
       setFinancialGoals(data);
@@ -40,7 +40,7 @@ function EditProfile() {
 
     async function fetchLifeGoals() {
       const res = await fetch(
-        `http://localhost:8000/life-goals?precisefp_account_id=${precisefp_account_id}`
+        `https://jointgoals.vercel.app//life-goals?precisefp_account_id=${precisefp_account_id}`
       );
       const data = await res.json();
       setLifeGoals(data);
@@ -49,7 +49,7 @@ function EditProfile() {
 
     async function fetchIncomes() {
       const res = await fetch(
-        `http://localhost:8000/incomes?precisefp_account_id=${precisefp_account_id}`
+        `https://jointgoals.vercel.app//incomes?precisefp_account_id=${precisefp_account_id}`
       );
       const data = await res.json();
       setIncomes(data);
@@ -58,7 +58,7 @@ function EditProfile() {
 
     async function fetchRealEstate() {
       const res = await fetch(
-        `http://localhost:8000/real-estate?precisefp_account_id=${precisefp_account_id}`
+        `https://jointgoals.vercel.app//real-estate?precisefp_account_id=${precisefp_account_id}`
       );
       const data = await res.json();
       setRealEstate(data);
@@ -67,7 +67,7 @@ function EditProfile() {
 
     async function fetchSavings() {
       const res = await fetch(
-        `http://localhost:8000/savings?precisefp_account_id=${precisefp_account_id}`
+        `https://jointgoals.vercel.app//savings?precisefp_account_id=${precisefp_account_id}`
       );
       const data = await res.json();
       setSavings(data);
@@ -76,7 +76,7 @@ function EditProfile() {
 
     async function fetchExpenses() {
       const res = await fetch(
-        `http://localhost:8000/expense?precisefp_account_id=${precisefp_account_id}`
+        `https://jointgoals.vercel.app//expense?precisefp_account_id=${precisefp_account_id}`
       );
       const data = await res.json();
       console.log(data);
@@ -86,7 +86,7 @@ function EditProfile() {
 
     async function fetchDebts() {
       const res = await fetch(
-        `http://localhost:8000/debts?precisefp_account_id=${precisefp_account_id}`
+        `https://jointgoals.vercel.app//debts?precisefp_account_id=${precisefp_account_id}`
       );
       const data = await res.json();
       setDebts(data);
@@ -95,7 +95,7 @@ function EditProfile() {
 
     async function fetchFocuses() {
       const res = await fetch(
-        `http://localhost:8000/focuses?precisefp_account_id=${precisefp_account_id}`
+        `https://jointgoals.vercel.app//focuses?precisefp_account_id=${precisefp_account_id}`
       );
       const data = await res.json();
       setFocuses(data);
@@ -104,7 +104,7 @@ function EditProfile() {
 
     async function fetchOpportunities() {
       const res = await fetch(
-        `http://localhost:8000/opportunities?precisefp_account_id=${precisefp_account_id}`
+        `https://jointgoals.vercel.app//opportunities?precisefp_account_id=${precisefp_account_id}`
       );
       const data = await res.json();
       setOpportunities(data);
@@ -113,18 +113,18 @@ function EditProfile() {
 
     async function fetchTopJointGoals() {
       const resTopJointGoals = await fetch(
-        `http://localhost:8000/top-joint-goals?precisefp_account_id=${precisefp_account_id}`
+        `https://jointgoals.vercel.app//top-joint-goals?precisefp_account_id=${precisefp_account_id}`
       );
       const dataTopJointGoals = await resTopJointGoals.json();
       setTopJointGoals(dataTopJointGoals);
       dataTopJointGoals.forEach(async (goal) => {
         const resGoalWhats = await fetch(
-          `http://localhost:8000/goal-whats?precisefp_account_id=${precisefp_account_id}&goal_index=${goal.index}`
+          `https://jointgoals.vercel.app//goal-whats?precisefp_account_id=${precisefp_account_id}&goal_index=${goal.index}`
         );
         const dataGoalWhats = await resGoalWhats.json();
         setGoalWhats([...goalWhats, dataGoalWhats]);
         const resActionResults = await fetch(
-          `http://localhost:8000/goal-action-results?precisefp_account_id=${precisefp_account_id}&goal_index=${goal.index}`
+          `https://jointgoals.vercel.app//goal-action-results?precisefp_account_id=${precisefp_account_id}&goal_index=${goal.index}`
         );
         const dataActionResults = await resActionResults.json();
         setActionResults([...actionResults, dataActionResults]);
@@ -424,7 +424,7 @@ function EditProfile() {
               className="w-100"
               onClick={async () => {
                 const res = await fetch(
-                  `http://localhost:8000/household?precisefp_account_id=${precisefp_account_id}`
+                  `https://jointgoals.vercel.app//household?precisefp_account_id=${precisefp_account_id}`
                 );
                 const data = await res.json();
                 setHousehold(data);
@@ -435,7 +435,7 @@ function EditProfile() {
             <Button
               className="w-100"
               onClick={() => {
-                fetch("http://localhost:8000/household", {
+                fetch("https://jointgoals.vercel.app//household", {
                   method: "PUT",
                   headers: {
                     Accept: "application/json",
@@ -550,7 +550,7 @@ function EditProfile() {
               className="w-100"
               onClick={async () => {
                 const res = await fetch(
-                  `http://localhost:8000/financial-goals?precisefp_account_id=${precisefp_account_id}`
+                  `https://jointgoals.vercel.app//financial-goals?precisefp_account_id=${precisefp_account_id}`
                 );
                 const data = await res.json();
                 setFinancialGoals(data);
@@ -562,7 +562,7 @@ function EditProfile() {
               className="w-100"
               onClick={() => {
                 console.log(JSON.stringify(financialGoals));
-                fetch("http://localhost:8000/financial-goals", {
+                fetch("https://jointgoals.vercel.app//financial-goals", {
                   method: "PUT",
                   headers: {
                     Accept: "application/json",
@@ -637,7 +637,7 @@ function EditProfile() {
               className="w-100"
               onClick={async () => {
                 const res = await fetch(
-                  `http://localhost:8000/life-goals?precisefp_account_id=${precisefp_account_id}`
+                  `https://jointgoals.vercel.app//life-goals?precisefp_account_id=${precisefp_account_id}`
                 );
                 const data = await res.json();
                 setLifeGoals(data);
@@ -649,7 +649,7 @@ function EditProfile() {
               className="w-100"
               onClick={() => {
                 console.log(JSON.stringify(lifeGoals));
-                fetch("http://localhost:8000/life-goals", {
+                fetch("https://jointgoals.vercel.app//life-goals", {
                   method: "PUT",
                   headers: {
                     Accept: "application/json",
@@ -745,7 +745,7 @@ function EditProfile() {
               className="w-100"
               onClick={async () => {
                 const res = await fetch(
-                  `http://localhost:8000/incomes?precisefp_account_id=${precisefp_account_id}`
+                  `https://jointgoals.vercel.app//incomes?precisefp_account_id=${precisefp_account_id}`
                 );
                 const data = await res.json();
                 setIncomes(data);
@@ -756,7 +756,7 @@ function EditProfile() {
             <Button
               className="w-100"
               onClick={() => {
-                fetch("http://localhost:8000/incomes", {
+                fetch("https://jointgoals.vercel.app//incomes", {
                   method: "PUT",
                   headers: {
                     Accept: "application/json",
@@ -1020,7 +1020,7 @@ function EditProfile() {
               className="w-100"
               onClick={async () => {
                 const res = await fetch(
-                  `http://localhost:8000/real-estate?precisefp_account_id=${precisefp_account_id}`
+                  `https://jointgoals.vercel.app//real-estate?precisefp_account_id=${precisefp_account_id}`
                 );
                 const data = await res.json();
                 setRealEstate(data);
@@ -1031,7 +1031,7 @@ function EditProfile() {
             <Button
               className="w-100"
               onClick={() => {
-                fetch("http://localhost:8000/real-estate", {
+                fetch("https://jointgoals.vercel.app//real-estate", {
                   method: "PUT",
                   headers: {
                     Accept: "application/json",
@@ -1275,7 +1275,7 @@ function EditProfile() {
               className="w-100"
               onClick={async () => {
                 const res = await fetch(
-                  `http://localhost:8000/savings?precisefp_account_id=${precisefp_account_id}`
+                  `https://jointgoals.vercel.app//savings?precisefp_account_id=${precisefp_account_id}`
                 );
                 const data = await res.json();
                 setSavings(data);
@@ -1286,7 +1286,7 @@ function EditProfile() {
             <Button
               className="w-100"
               onClick={() => {
-                fetch("http://localhost:8000/savings", {
+                fetch("https://jointgoals.vercel.app//savings", {
                   method: "PUT",
                   headers: {
                     Accept: "application/json",
@@ -1566,7 +1566,7 @@ function EditProfile() {
               className="w-100"
               onClick={async () => {
                 const res = await fetch(
-                  `http://localhost:8000/debts?precisefp_account_id=${precisefp_account_id}`
+                  `https://jointgoals.vercel.app//debts?precisefp_account_id=${precisefp_account_id}`
                 );
                 const data = await res.json();
                 setDebts(data);
@@ -1577,7 +1577,7 @@ function EditProfile() {
             <Button
               className="w-100"
               onClick={() => {
-                fetch("http://localhost:8000/debts", {
+                fetch("https://jointgoals.vercel.app//debts", {
                   method: "PUT",
                   headers: {
                     Accept: "application/json",
