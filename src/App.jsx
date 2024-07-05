@@ -4,6 +4,7 @@ import "./App.css";
 import Home from "./components/Home";
 import EditProfile from "./components/EditProfile";
 import Login from "./components/Login";
+import { useAuth } from "./useAuth";
 
 function RequireAuth({ children }) {
   const {
