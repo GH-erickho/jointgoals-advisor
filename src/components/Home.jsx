@@ -48,7 +48,7 @@ function Home() {
               <td>{couple.spouse_last_name}</td>
               <td>{couple.spouse_sex}</td>
               <td>{couple.spouse_date_of_birth}</td>
-              <td>{couple.has_children}</td>
+              <td>{couple.has_children ? "Yes" : "No"}</td>
             </tr>
           );
         })}

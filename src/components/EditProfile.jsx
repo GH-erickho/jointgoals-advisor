@@ -79,7 +79,6 @@ function EditProfile() {
         `http://localhost:8000/expense?precisefp_account_id=${precisefp_account_id}`
       );
       const data = await res.json();
-      console.log(data);
       setExpense(data);
     }
     fetchExpenses();
@@ -199,7 +198,7 @@ function EditProfile() {
             type="checkbox"
             id="has_spouse"
             label="Has Spouse?"
-            value={household.has_spouse}
+            checked={household.has_spouse}
             onChange={(e) =>
               setHousehold({ ...household, has_spouse: e.target.checked })
             }
@@ -561,7 +560,6 @@ function EditProfile() {
             <Button
               className="w-100"
               onClick={() => {
-                console.log(JSON.stringify(financialGoals));
                 fetch("http://localhost:8000/financial-goals", {
                   method: "PUT",
                   headers: {
@@ -648,7 +646,6 @@ function EditProfile() {
             <Button
               className="w-100"
               onClick={() => {
-                console.log(JSON.stringify(lifeGoals));
                 fetch("http://localhost:8000/life-goals", {
                   method: "PUT",
                   headers: {
@@ -1335,10 +1332,10 @@ function EditProfile() {
             </Form.Label>
             <Col sm="2">
               <Form.Control
-                value={expense.discretionary || ""}
+                value={expense.savings || ""}
                 type="number"
                 onChange={(e) =>
-                  setExpense({ ...expense, discretionary: e.target.value })
+                  setExpense({ ...expense, savings: e.target.value })
                 }
                 placeholder="Discretionary Savings"
               />
@@ -1365,6 +1362,44 @@ function EditProfile() {
               />
             </Col>
           </Form.Group>
+        </Row>
+        <Row>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              gap: "20px",
+            }}
+          >
+            <Button
+              variant="secondary"
+              className="w-100"
+              onClick={async () => {
+                const res = await fetch(
+                  `http://localhost:8000/expense?precisefp_account_id=${precisefp_account_id}`
+                );
+                const data = await res.json();
+                setExpense(data);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="w-100"
+              onClick={() => {
+                fetch("http://localhost:8000/expense", {
+                  method: "PUT",
+                  headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(expense),
+                });
+              }}
+            >
+              Save
+            </Button>
+          </div>
         </Row>
       </Stack>
       <Stack gap={3} className="p-3 my-2" style={{ border: "1px solid black" }}>
@@ -1397,7 +1432,11 @@ function EditProfile() {
                       placeholder="Name"
                     />
                   </Form.Group>
-                  <Form.Group className="col-2" as={Col} controlId="formGridDebtType">
+                  <Form.Group
+                    className="col-2"
+                    as={Col}
+                    controlId="formGridDebtType"
+                  >
                     <Form.Label>Type</Form.Label>
                     <Form.Select aria-label="Debt Type">
                       <option
@@ -1507,7 +1546,10 @@ function EditProfile() {
                       value={debt.interest_rate || ""}
                       type="number"
                       onChange={(e) => {
-                        const newDebt = { ...debt, interest_rate: e.target.value };
+                        const newDebt = {
+                          ...debt,
+                          interest_rate: e.target.value,
+                        };
                         setDebts([
                           ...newDebt.slice(0, i),
                           newDebt,
@@ -1522,10 +1564,7 @@ function EditProfile() {
               <Col className="col-2">
                 <Button
                   onClick={() =>
-                    setDebts([
-                      ...debts.slice(0, i),
-                      ...debts.slice(i + 1),
-                    ])
+                    setDebts([...debts.slice(0, i), ...debts.slice(i + 1)])
                   }
                 >
                   Delete Debt
@@ -1591,6 +1630,19 @@ function EditProfile() {
             </Button>
           </div>
         </Row>
+      </Stack>
+      <Stack gap={3} className="p-3 my-2" style={{ border: "1px solid black" }}>
+        <h2>Top Joint Goals</h2>
+        {topJointGoals?.map((goal, i) => {
+          return (
+            <Row key={`topJoinGoal${i}`}>
+              <Form.Group as={Col} controlId="formGridTopJointGoal">
+                <Form.Control value={goal.index || ""} />
+                <Form.Control value={goal.statement || ""} />
+              </Form.Group>
+            </Row>
+          );
+        })}
       </Stack>
     </div>
   );

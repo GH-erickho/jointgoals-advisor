@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
 import { getHost } from "./utils/env";
+import { Col, Form, Row, Stack } from "react-bootstrap";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const Login = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        navigate("/")
+        navigate("/");
         // todo: Implement API protection.
         // user
         //   .getIdToken(true)
@@ -45,14 +46,15 @@ const Login = () => {
   };
 
   return (
-    <DivMargin>
-      <p>JointGoals Admin</p>
+    <div>
+      <h2>JointGoals Admin</h2>
       <form>
         <DivMarginBottom>
           <LabelMarginRight htmlFor="email-address">
             Email address
           </LabelMarginRight>
           <input
+            style={{ background: "white", color: "black" }}
             id="email-address"
             name="email"
             type="email"
@@ -64,6 +66,7 @@ const Login = () => {
         <DivMarginBottom>
           <LabelMarginRight htmlFor="password">Password</LabelMarginRight>
           <input
+            style={{ background: "white", color: "black" }}
             id="password"
             name="password"
             type="password"
@@ -77,7 +80,7 @@ const Login = () => {
           <button onClick={onLogin}>Login</button>
         </div>
       </form>
-    </DivMargin>
+    </div>
   );
 };
 
