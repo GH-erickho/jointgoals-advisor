@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Col, Form, Row, Stack } from "react-bootstrap";
 import { useParams } from "react-router-dom";
+import Tiptap from "./Tiptap";
 
 function EditProfile() {
   const { precisefp_account_id } = useParams();
@@ -1633,16 +1634,18 @@ function EditProfile() {
       </Stack>
       <Stack gap={3} className="p-3 my-2" style={{ border: "1px solid black" }}>
         <h2>Top Joint Goals</h2>
-        {topJointGoals?.map((goal, i) => {
+                <Tiptap />
+        {/* {topJointGoals?.map((goal, i) => {
           return (
             <Row key={`topJoinGoal${i}`}>
               <Form.Group as={Col} controlId="formGridTopJointGoal">
                 <Form.Control value={goal.index || ""} />
                 <Form.Control value={goal.statement || ""} />
+
               </Form.Group>
             </Row>
           );
-        })}
+        })} */}
       </Stack>
     </div>
   );
