@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Col, Form, Row, Stack } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import Tiptap from "./Tiptap";
+import TopJointGoals from "./TopJointGoals";
 
 function EditProfile() {
   const { precisefp_account_id } = useParams();
@@ -14,11 +14,6 @@ function EditProfile() {
   const [savings, setSavings] = useState([]);
   const [expense, setExpense] = useState([]);
   const [debts, setDebts] = useState([]);
-  const [focuses, setFocuses] = useState([]);
-  const [opportunities, setOpportunities] = useState([]);
-  const [topJointGoals, setTopJointGoals] = useState([]);
-  const [goalWhats, setGoalWhats] = useState([]);
-  const [actionResults, setActionResults] = useState([]);
 
   useEffect(() => {
     async function fetchHousehold() {
@@ -92,45 +87,6 @@ function EditProfile() {
       setDebts(data);
     }
     fetchDebts();
-
-    async function fetchFocuses() {
-      const res = await fetch(
-        `http://localhost:8000/focuses?precisefp_account_id=${precisefp_account_id}`
-      );
-      const data = await res.json();
-      setFocuses(data);
-    }
-    fetchFocuses();
-
-    async function fetchOpportunities() {
-      const res = await fetch(
-        `http://localhost:8000/opportunities?precisefp_account_id=${precisefp_account_id}`
-      );
-      const data = await res.json();
-      setOpportunities(data);
-    }
-    fetchOpportunities();
-
-    async function fetchTopJointGoals() {
-      const resTopJointGoals = await fetch(
-        `http://localhost:8000/top-joint-goals?precisefp_account_id=${precisefp_account_id}`
-      );
-      const dataTopJointGoals = await resTopJointGoals.json();
-      setTopJointGoals(dataTopJointGoals);
-      dataTopJointGoals.forEach(async (goal) => {
-        const resGoalWhats = await fetch(
-          `http://localhost:8000/goal-whats?precisefp_account_id=${precisefp_account_id}&goal_index=${goal.index}`
-        );
-        const dataGoalWhats = await resGoalWhats.json();
-        setGoalWhats([...goalWhats, dataGoalWhats]);
-        const resActionResults = await fetch(
-          `http://localhost:8000/goal-action-results?precisefp_account_id=${precisefp_account_id}&goal_index=${goal.index}`
-        );
-        const dataActionResults = await resActionResults.json();
-        setActionResults([...actionResults, dataActionResults]);
-      });
-    }
-    fetchTopJointGoals();
   }, [precisefp_account_id]);
 
   return (
@@ -1632,21 +1588,7 @@ function EditProfile() {
           </div>
         </Row>
       </Stack>
-      <Stack gap={3} className="p-3 my-2" style={{ border: "1px solid black" }}>
-        <h2>Top Joint Goals</h2>
-                <Tiptap />
-        {/* {topJointGoals?.map((goal, i) => {
-          return (
-            <Row key={`topJoinGoal${i}`}>
-              <Form.Group as={Col} controlId="formGridTopJointGoal">
-                <Form.Control value={goal.index || ""} />
-                <Form.Control value={goal.statement || ""} />
-
-              </Form.Group>
-            </Row>
-          );
-        })} */}
-      </Stack>
+      <TopJointGoals precisefp_account_id={precisefp_account_id} />
     </div>
   );
 }
