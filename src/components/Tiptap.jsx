@@ -8,7 +8,7 @@ import StarterKit from "@tiptap/starter-kit";
 import React, { useState } from "react";
 import { Button, Col, Row, Stack } from "react-bootstrap";
 
-const MenuBar = ({deleteItem}) => {
+const MenuBar = ({ deleteItem }) => {
   const { editor } = useCurrentEditor();
 
   if (!editor) {
@@ -60,7 +60,9 @@ const MenuBar = ({deleteItem}) => {
             Redo
           </button>
         </div>
-        <Button variant="danger" onClick={deleteItem}>Delete</Button>
+        <Button variant="danger" onClick={deleteItem}>
+          Delete
+        </Button>
       </div>
     </div>
   );
@@ -84,7 +86,7 @@ const extensions = [
 export default ({ initialContent, cancel, save, deleteItem }) => {
   const [content, setContent] = useState(initialContent);
   return (
-    <Stack gap={3} className="p-3 my-2" style={{ border: "1px solid black" }}>
+    <Stack gap={3} style={{ marginBottom: "8px", marginTop: "8px" }}>
       {" "}
       <Row>
         <EditorProvider
