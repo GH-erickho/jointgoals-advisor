@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { PencilSquare } from "react-bootstrap-icons";
-import parse from "html-react-parser";
 import { Button, Col, Row, Stack } from "react-bootstrap";
 import EditBox from "../EditBox";
 
@@ -78,6 +76,7 @@ const TopJointGoalSummary = ({
         <EditBox
           path="top-joint-goal"
           item={goal}
+          itemKey="statement"
           deleteItem={deleteTopJointGoal}
           setItem={setTopJointGoal}
         />
@@ -89,6 +88,7 @@ const TopJointGoalSummary = ({
                 <EditBox
                   path="goal-what"
                   item={goalWhat}
+                  itemKey="statement"
                   deleteItem={() =>
                     setGoalWhats([
                       ...goalWhat.slice(0, i),
@@ -120,8 +120,35 @@ const TopJointGoalSummary = ({
           {actionResults.map((actionResult) => {
             return (
               <Row key={`actionResult${actionResult.id}`}>
-                <Col>{parse(actionResult.action)}</Col>
-                <Col>{parse(actionResult.result)}</Col>
+                <Col>
+                  <EditBox
+                    path="goal-action-result"
+                    item={actionResult}
+                    itemKey="action"
+                    deleteItem={() =>
+                      setActionResults([
+                        ...actionResults.slice(0, i),
+                        ...actionResults.slice(i + 1),
+                      ])
+                    }
+                  />
+                </Col>
+                <Col>
+                  <EditBox
+                    path="goal-action-result"
+                    item={actionResult}
+                    itemKey="result"
+                    deleteItem={() =>
+                      setActionResults([
+                        ...actionResults.slice(0, i),
+                        ...actionResults.slice(i + 1),
+                      ])
+                    }
+                  />
+                </Col>
+
+                {/* <Col>{parse(actionResult.action)}</Col>
+                <Col>{parse(actionResult.result)}</Col> */}
               </Row>
             );
           })}

@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { Button, Row } from "react-bootstrap";
 import { PencilSquare } from "react-bootstrap-icons";
-import parse from "html-react-parser";
-import Tiptap from "./components/Tiptap";
+import Tiptap from "./Tiptap";
 
-const EditBox = ({ path, item, itemKey, deleteItem, setItem }) => {
+const EditAction = ({actionResult, setActionResults}) => {
   const [editMode, setEditMode] = useState(false);
 
   return (
@@ -25,26 +24,23 @@ const EditBox = ({ path, item, itemKey, deleteItem, setItem }) => {
             >
               <PencilSquare />
             </Button>
-            {/* <div>{parse(item.statement)}</div> */}
-            <div>{parse(item[itemKey])}</div>
+            <div>{parse(actionResult.action)}</div>
           </div>
         </Row>
       )}
       {editMode && (
         <Tiptap
-          // initialContent={item.statement}
-          initialContent={item[itemKey]}
+          initialContent={item.statement}
           cancel={() => setEditMode(false)}
           save={async (newStatement) => {
-            // const newItem = { ...item, statement: newStatement };
-            const newItem = { ...item, [itemKey]: newStatement };
-            const response = await fetch(`http://localhost:8000/${path}`, {
+            const newActionResult = {...actionResult, action: newStatement};
+            const response = await fetch(`http://localhost:8000/goal-action-result`, {
               method: "PUT",
               headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify(newItem),
+              body: JSON.stringify(newActionResult),
             });
             if (response.status === 200) {
               setItem(newItem);
@@ -52,6 +48,22 @@ const EditBox = ({ path, item, itemKey, deleteItem, setItem }) => {
             } else {
               console.log(response);
             }
+
+            // const newItem = { ...item, statement: newStatement };
+            // const response = await fetch(`http://localhost:8000/${path}`, {
+            //   method: "PUT",
+            //   headers: {
+            //     Accept: "application/json",
+            //     "Content-Type": "application/json",
+            //   },
+            //   body: JSON.stringify(newItem),
+            // });
+            // if (response.status === 200) {
+            //   setItem(newItem);
+            //   setEditMode(false);
+            // } else {
+            //   console.log(response);
+            // }
           }}
           deleteItem={async () => {
             const response = await fetch(`http://localhost:8000/${path}`, {
@@ -72,6 +84,6 @@ const EditBox = ({ path, item, itemKey, deleteItem, setItem }) => {
       )}
     </Row>
   );
-};
+}
 
-export default EditBox;
+export default EditAction;
