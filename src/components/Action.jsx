@@ -34,7 +34,7 @@ const EditAction = ({actionResult, setActionResults}) => {
           cancel={() => setEditMode(false)}
           save={async (newStatement) => {
             const newActionResult = {...actionResult, action: newStatement};
-            const response = await fetch(`http://localhost:8000/goal-action-result`, {
+            const response = await fetch(`https://jointgoals.vercel.app/goal-action-result`, {
               method: "PUT",
               headers: {
                 Accept: "application/json",
@@ -50,7 +50,7 @@ const EditAction = ({actionResult, setActionResults}) => {
             }
 
             // const newItem = { ...item, statement: newStatement };
-            // const response = await fetch(`http://localhost:8000/${path}`, {
+            // const response = await fetch(`https://jointgoals.vercel.app/${path}`, {
             //   method: "PUT",
             //   headers: {
             //     Accept: "application/json",
@@ -66,7 +66,7 @@ const EditAction = ({actionResult, setActionResults}) => {
             // }
           }}
           deleteItem={async () => {
-            const response = await fetch(`http://localhost:8000/${path}`, {
+            const response = await fetch(`https://jointgoals.vercel.app/${path}`, {
               method: "DELETE",
               headers: {
                 Accept: "application/json",

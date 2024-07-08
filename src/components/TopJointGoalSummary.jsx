@@ -14,7 +14,7 @@ const TopJointGoalSummary = ({
   useEffect(() => {
     async function fetchGoalWhats() {
       const resGoalWhats = await fetch(
-        `http://localhost:8000/goal-whats?precisefp_account_id=${precisefp_account_id}&goal_index=${goal.index}`
+        `https://jointgoals.vercel.app/goal-whats?precisefp_account_id=${precisefp_account_id}&goal_index=${goal.index}`
       );
       const dataGoalWhats = await resGoalWhats.json();
       setGoalWhats(dataGoalWhats);
@@ -23,7 +23,7 @@ const TopJointGoalSummary = ({
 
     async function fetchActionResults() {
       const resActionResults = await fetch(
-        `http://localhost:8000/goal-action-results?precisefp_account_id=${precisefp_account_id}&goal_index=${goal.index}`
+        `https://jointgoals.vercel.app/goal-action-results?precisefp_account_id=${precisefp_account_id}&goal_index=${goal.index}`
       );
       const dataActionResults = await resActionResults.json();
       setActionResults(dataActionResults);
@@ -53,7 +53,7 @@ const TopJointGoalSummary = ({
             variant="danger"
             onClick={async () => {
               const response = await fetch(
-                `http://localhost:8000/top-joint-goal`,
+                `https://jointgoals.vercel.app/top-joint-goal`,
                 {
                   method: "DELETE",
                   headers: {

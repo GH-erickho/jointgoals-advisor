@@ -38,7 +38,7 @@ const EditBox = ({ path, item, itemKey, deleteItem, setItem }) => {
           save={async (newStatement) => {
             // const newItem = { ...item, statement: newStatement };
             const newItem = { ...item, [itemKey]: newStatement };
-            const response = await fetch(`http://localhost:8000/${path}`, {
+            const response = await fetch(`https://jointgoals.vercel.app/${path}`, {
               method: "PUT",
               headers: {
                 Accept: "application/json",
@@ -54,7 +54,7 @@ const EditBox = ({ path, item, itemKey, deleteItem, setItem }) => {
             }
           }}
           deleteItem={async () => {
-            const response = await fetch(`http://localhost:8000/${path}`, {
+            const response = await fetch(`https://jointgoals.vercel.app/${path}`, {
               method: "DELETE",
               headers: {
                 Accept: "application/json",

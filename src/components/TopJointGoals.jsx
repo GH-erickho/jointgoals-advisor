@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Stack } from "react-bootstrap";
-import TopJointGoalSummary from "./TopJointGoal";
+import TopJointGoalSummary from "./TopJointGoalSummary";
 
 function TopJointGoals({ precisefp_account_id }) {
   const [focuses, setFocuses] = useState([]);
@@ -10,7 +10,7 @@ function TopJointGoals({ precisefp_account_id }) {
   useEffect(() => {
     async function fetchTopJointGoals() {
       const resTopJointGoals = await fetch(
-        `http://localhost:8000/top-joint-goals?precisefp_account_id=${precisefp_account_id}`
+        `https://jointgoals.vercel.app/top-joint-goals?precisefp_account_id=${precisefp_account_id}`
       );
       const dataTopJointGoals = await resTopJointGoals.json();
       setTopJointGoals(dataTopJointGoals);
@@ -19,7 +19,7 @@ function TopJointGoals({ precisefp_account_id }) {
 
     //   async function fetchFocuses() {
     //     const res = await fetch(
-    //       `http://localhost:8000/focuses?precisefp_account_id=${precisefp_account_id}`
+    //       `https://jointgoals.vercel.app/focuses?precisefp_account_id=${precisefp_account_id}`
     //     );
     //     const data = await res.json();
     //     setFocuses(data);
@@ -28,7 +28,7 @@ function TopJointGoals({ precisefp_account_id }) {
 
     //   async function fetchOpportunities() {
     //     const res = await fetch(
-    //       `http://localhost:8000/opportunities?precisefp_account_id=${precisefp_account_id}`
+    //       `https://jointgoals.vercel.app/opportunities?precisefp_account_id=${precisefp_account_id}`
     //     );
     //     const data = await res.json();
     //     setOpportunities(data);

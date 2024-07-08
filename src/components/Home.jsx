@@ -6,7 +6,7 @@ function Home() {
   const [couples, setCouples] = useState([]);
   useEffect(() => {
     async function fetchData() {
-      const res = await fetch("https://jointgoals.vercel.app//couple");
+      const res = await fetch("https://jointgoals.vercel.app/couple");
       const data = await res.json();
       setCouples(data);
     }
