@@ -10,8 +10,6 @@ const TopJointGoalSummary = ({
   deleteTopJointGoal,
   setTopJointGoal,
 }) => {
-  const [editMode, setEditMode] = useState(false);
-
   const [goalWhats, setGoalWhats] = useState([]);
   const [actionResults, setActionResults] = useState([]);
 
@@ -38,91 +36,24 @@ const TopJointGoalSummary = ({
   return (
     <Stack gap={3}>
       <Row style={{ border: "1px solid black" }}>
-        <EditBox item={goal} deleteItem={deleteTopJointGoal} />
-        {/* {!editMode && (
-          <Row>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                marginTop: "8px",
-              }}
-            >
-              <h4
-                style={{
-                  marginTop: "8px",
-                }}
-              >
-                Summary Statement
-              </h4>
-              <Button
-                variant="danger"
-                onClick={async () => {
-                  const response = await fetch(
-                    `http://localhost:8000/top-joint-goal`,
-                    {
-                      method: "DELETE",
-                      headers: {
-                        Accept: "application/json",
-                        "Content-Type": "application/json",
-                      },
-                      body: JSON.stringify(goal),
-                    }
-                  );
-                  if (response.status === 200) {
-                    deleteTopJointGoal();
-                  } else {
-                    console.log(response);
-                  }
-                }}
-              >
-                Delete
-              </Button>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                marginBottom: "20px",
-              }}
-            >
-              <Button
-                onClick={() => setEditMode(true)}
-                style={{ marginRight: "8px" }}
-              >
-                <PencilSquare />
-              </Button>
-              <div>{parse(goal.statement)}</div>
-            </div>
-          </Row>
-        )}
-        {editMode && (
-          <Tiptap
-            initialContent={goal.statement}
-            cancel={() => setEditMode(false)}
-            save={async (newStatement) => {
-              const newGoal = { ...goal, statement: newStatement };
-              const response = await fetch(
-                `http://localhost:8000/top-joint-goal`,
-                {
-                  method: "PUT",
-                  headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify(newGoal),
-                }
-              );
-              if (response.status === 200) {
-                setTopJointGoal(newGoal);
-                setEditMode(false);
-              } else {
-                console.log(response);
-              }
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginTop: "8px",
+          }}
+        >
+          <h4
+            style={{
+              marginTop: "8px",
             }}
-            deleteItem={async () => {
+          >
+            Summary Statement
+          </h4>
+          <Button
+            variant="danger"
+            onClick={async () => {
               const response = await fetch(
                 `http://localhost:8000/top-joint-goal`,
                 {
@@ -131,36 +62,47 @@ const TopJointGoalSummary = ({
                     Accept: "application/json",
                     "Content-Type": "application/json",
                   },
-                  body: JSON.stringify(goal),
+                  body: JSON.stringify(item),
                 }
               );
               if (response.status === 200) {
-                deleteTopJointGoal();
+                deleteItem();
               } else {
                 console.log(response);
               }
             }}
-          />
-        )} */}
+          >
+            Delete
+          </Button>
+        </div>
+        <EditBox
+          path="top-joint-goal"
+          item={goal}
+          deleteItem={deleteTopJointGoal}
+          setItem={setTopJointGoal}
+        />
         <h4>Tasks</h4>
         <div style={{ marginBottom: "10px" }}>
           <Stack gap={1}>
-            {goalWhats.map((goalWhat) => {
+            {goalWhats.map((goalWhat, i) => {
               return (
-                <Row
-                  key={`goalWhat${goalWhat.id}`}
-                  style={{ marginBottom: "5px" }}
-                >
-                  <div style={{ display: "flex", alignItems: "center" }}>
-                    <Button
-                      onClick={() => setEditMode(true)}
-                      style={{ marginRight: "8px" }}
-                    >
-                      <PencilSquare />
-                    </Button>
-                    <div>{parse(goalWhat.statement)}</div>
-                  </div>
-                </Row>
+                <EditBox
+                  path="goal-what"
+                  item={goalWhat}
+                  deleteItem={() =>
+                    setGoalWhats([
+                      ...goalWhat.slice(0, i),
+                      ...goalWhat.slice(i + 1),
+                    ])
+                  }
+                  setItem={(newGoalWhat) =>
+                    setGoalWhats([
+                      ...goalWhat.slice(0, i),
+                      newGoalWhat,
+                      ...goalWhat.slice(i + 1),
+                    ])
+                  }
+                />
               );
             })}
           </Stack>

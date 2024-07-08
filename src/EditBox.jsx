@@ -4,7 +4,7 @@ import { PencilSquare } from "react-bootstrap-icons";
 import parse from "html-react-parser";
 import Tiptap from "./components/Tiptap";
 
-const EditBox = ({item, deleteItem}) => {
+const EditBox = ({ path, item, deleteItem, setItem }) => {
   const [editMode, setEditMode] = useState(false);
 
   return (
@@ -15,47 +15,8 @@ const EditBox = ({item, deleteItem}) => {
             style={{
               display: "flex",
               flexDirection: "row",
-              justifyContent: "space-between",
-              marginTop: "8px",
-            }}
-          >
-            <h4
-              style={{
-                marginTop: "8px",
-              }}
-            >
-              Summary Statement
-            </h4>
-            <Button
-              variant="danger"
-              onClick={async () => {
-                const response = await fetch(
-                  `http://localhost:8000/top-joint-goal`,
-                  {
-                    method: "DELETE",
-                    headers: {
-                      Accept: "application/json",
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(item),
-                  }
-                );
-                if (response.status === 200) {
-                  deleteItem();
-                } else {
-                  console.log(response);
-                }
-              }}
-            >
-              Delete
-            </Button>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
               alignItems: "center",
-              marginBottom: "20px",
+              marginBottom: "10px",
             }}
           >
             <Button
@@ -73,39 +34,33 @@ const EditBox = ({item, deleteItem}) => {
           initialContent={item.statement}
           cancel={() => setEditMode(false)}
           save={async (newStatement) => {
-            const newGoal = { ...item, statement: newStatement };
-            const response = await fetch(
-              `http://localhost:8000/top-joint-goal`,
-              {
-                method: "PUT",
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(newGoal),
-              }
-            );
+            const newItem = { ...item, statement: newStatement };
+            const response = await fetch(`http://localhost:8000/${path}`, {
+              method: "PUT",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(newItem),
+            });
             if (response.status === 200) {
-              setTopJointGoal(newGoal);
+              setItem(newItem);
               setEditMode(false);
             } else {
               console.log(response);
             }
           }}
           deleteItem={async () => {
-            const response = await fetch(
-              `http://localhost:8000/top-joint-goal`,
-              {
-                method: "DELETE",
-                headers: {
-                  Accept: "application/json",
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(goal),
-              }
-            );
+            const response = await fetch(`http://localhost:8000/${path}`, {
+              method: "DELETE",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(item),
+            });
             if (response.status === 200) {
-              deleteTopJointGoal();
+              deleteItem();
             } else {
               console.log(response);
             }
