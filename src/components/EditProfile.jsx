@@ -1184,12 +1184,27 @@ function EditProfile() {
               </Stack>
               <Col className="col-2">
                 <Button
-                  onClick={() =>
-                    setSavings([
-                      ...savings.slice(0, i),
-                      ...savings.slice(i + 1),
-                    ])
-                  }
+                  onClick={async () => {
+                    const response = await fetch(
+                      `https://jointgoals.vercel.app/savings`,
+                      {
+                        method: "DELETE",
+                        headers: {
+                          Accept: "application/json",
+                          "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(saving),
+                      }
+                    );
+                    if (response.status === "200") {
+                      setSavings([
+                        ...savings.slice(0, i),
+                        ...savings.slice(i + 1),
+                      ]);
+                    } else {
+                      console.error(response)
+                    }
+                  }}
                 >
                   Delete Saving
                 </Button>

@@ -13,8 +13,6 @@ function Home() {
     fetchData();
   }, []);
 
-  console.log(couples);
-
   return (
     <Table striped bordered hover>
       <thead>

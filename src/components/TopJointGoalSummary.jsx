@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Col, Row, Stack } from "react-bootstrap";
 import EditBox from "../EditBox";
+import { Plus } from "react-bootstrap-icons";
 
 const TopJointGoalSummary = ({
   precisefp_account_id,
@@ -14,7 +15,8 @@ const TopJointGoalSummary = ({
   useEffect(() => {
     async function fetchGoalWhats() {
       const resGoalWhats = await fetch(
-        `https://jointgoals.vercel.app/goal-whats?precisefp_account_id=${precisefp_account_id}&goal_index=${goal.index}`
+        // `https://jointgoals.vercel.app/goal-whats?precisefp_account_id=${precisefp_account_id}&goal_index=${goal.index}`
+        `http://localhost:8000/goal-whats?precisefp_account_id=${precisefp_account_id}&goal_index=${goal.index}`
       );
       const dataGoalWhats = await resGoalWhats.json();
       setGoalWhats(dataGoalWhats);
@@ -23,7 +25,7 @@ const TopJointGoalSummary = ({
 
     async function fetchActionResults() {
       const resActionResults = await fetch(
-        `https://jointgoals.vercel.app/goal-action-results?precisefp_account_id=${precisefp_account_id}&goal_index=${goal.index}`
+        `http://localhost:8000/goal-action-results?precisefp_account_id=${precisefp_account_id}&goal_index=${goal.index}`
       );
       const dataActionResults = await resActionResults.json();
       setActionResults(dataActionResults);
@@ -86,28 +88,62 @@ const TopJointGoalSummary = ({
             {goalWhats.map((goalWhat, i) => {
               return (
                 <EditBox
+                  key={`goalWhat${i}`}
                   path="goal-what"
                   item={goalWhat}
                   itemKey="statement"
                   deleteItem={() =>
                     setGoalWhats([
-                      ...goalWhat.slice(0, i),
-                      ...goalWhat.slice(i + 1),
+                      ...goalWhats.slice(0, i),
+                      ...goalWhats.slice(i + 1),
                     ])
                   }
                   setItem={(newGoalWhat) =>
                     setGoalWhats([
-                      ...goalWhat.slice(0, i),
+                      ...goalWhats.slice(0, i),
                       newGoalWhat,
-                      ...goalWhat.slice(i + 1),
+                      ...goalWhats.slice(i + 1),
                     ])
                   }
                 />
               );
             })}
           </Stack>
+          <div style={{ marginLeft: "auto", width: "45px" }}>
+            <Button
+              onClick={async () => {
+                const response = await fetch(
+                  `https://jointgoals.vercel.app/goal-whats`,
+                  {
+                    method: "PUT",
+                    headers: {
+                      Accept: "application/json",
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify([
+                      ...goalWhats,
+                      {
+                        precisefp_account_id: parseInt(precisefp_account_id),
+                        goal_id: goal.id,
+                        goal_index: goal.index + 1,
+                        statement: "EDIT THIS STATEMENT",
+                        index: goalWhats.length,
+                      },
+                    ]),
+                  }
+                );
+                if (response.status === 200) {
+                  setGoalWhats(await response.json());
+                } else {
+                  console.log(response);
+                }
+              }}
+              style={{ paddingBottom: "10px" }}
+            >
+              <Plus />
+            </Button>
+          </div>
         </div>
-
         <Stack gap={1}>
           <Row>
             <Col>
@@ -146,12 +182,46 @@ const TopJointGoalSummary = ({
                     }
                   />
                 </Col>
-
-                {/* <Col>{parse(actionResult.action)}</Col>
-                <Col>{parse(actionResult.result)}</Col> */}
               </Row>
             );
           })}
+
+          <div style={{ marginLeft: "auto", marginBottom: '10px', width: "45px" }}>
+            <Button
+              onClick={async () => {
+                const response = await fetch(
+                  // `https://jointgoals.vercel.app/goal-action-results`,
+                  `http://localhost:8000/goal-action-results`,
+                  {
+                    method: "PUT",
+                    headers: {
+                      Accept: "application/json",
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify([
+                      ...actionResults,
+                      {
+                        precisefp_account_id: parseInt(precisefp_account_id),
+                        goal_id: goal.id,
+                        goal_index: goal.index,
+                        index: actionResults.length + 1,
+                        action: "EDIT THIS STATEMENT",
+                        result: "EDIT THIS STATEMENT",
+                      },
+                    ]),
+                  }
+                );
+                if (response.status === 200) {
+                  setActionResults(await response.json());
+                } else {
+                  console.log(response);
+                }
+              }}
+              style={{ paddingBottom: "10px" }}
+            >
+              <Plus />
+            </Button>
+          </div>
         </Stack>
       </Row>
     </Stack>

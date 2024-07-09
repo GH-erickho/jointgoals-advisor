@@ -25,18 +25,15 @@ const EditBox = ({ path, item, itemKey, deleteItem, setItem }) => {
             >
               <PencilSquare />
             </Button>
-            {/* <div>{parse(item.statement)}</div> */}
             <div>{parse(item[itemKey])}</div>
           </div>
         </Row>
       )}
       {editMode && (
         <Tiptap
-          // initialContent={item.statement}
           initialContent={item[itemKey]}
           cancel={() => setEditMode(false)}
           save={async (newStatement) => {
-            // const newItem = { ...item, statement: newStatement };
             const newItem = { ...item, [itemKey]: newStatement };
             const response = await fetch(`https://jointgoals.vercel.app/${path}`, {
               method: "PUT",
