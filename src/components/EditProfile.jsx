@@ -1478,9 +1478,9 @@ function EditProfile() {
                       onChange={(e) => {
                         const newDebt = { ...debt, balance: e.target.value };
                         setDebts([
-                          ...newDebt.slice(0, i),
+                          ...debts.slice(0, i),
                           newDebt,
-                          ...newDebt.slice(i + 1),
+                          ...debts.slice(i + 1),
                         ]);
                       }}
                       placeholder="Loan Balance"
@@ -1499,9 +1499,9 @@ function EditProfile() {
                       onChange={(e) => {
                         const newDebt = { ...debt, payment: e.target.value };
                         setDebts([
-                          ...newDebt.slice(0, i),
+                          ...debts.slice(0, i),
                           newDebt,
-                          ...newDebt.slice(i + 1),
+                          ...debts.slice(i + 1),
                         ]);
                       }}
                       placeholder="Monthly Payment"
@@ -1523,9 +1523,9 @@ function EditProfile() {
                           interest_rate: e.target.value,
                         };
                         setDebts([
-                          ...newDebt.slice(0, i),
+                          ...debts.slice(0, i),
                           newDebt,
-                          ...newDebt.slice(i + 1),
+                          ...debts.slice(i + 1),
                         ]);
                       }}
                       placeholder="Interest Rate %"
@@ -1594,7 +1594,7 @@ function EditProfile() {
                     Accept: "application/json",
                     "Content-Type": "application/json",
                   },
-                  body: JSON.stringify(savings),
+                  body: JSON.stringify(debts),
                 });
               }}
             >
