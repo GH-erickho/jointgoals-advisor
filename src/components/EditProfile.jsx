@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Button, Col, Form, Row, Stack } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import TopJointGoals from "./TopJointGoals";
+import EditBox from "../EditBox";
 
 function EditProfile() {
   const { precisefp_account_id } = useParams();
@@ -14,6 +15,8 @@ function EditProfile() {
   const [savings, setSavings] = useState([]);
   const [expense, setExpense] = useState([]);
   const [debts, setDebts] = useState([]);
+  const [focuses, setFocuses] = useState([]);
+  const [opportunities, setOpportunities] = useState([]);
 
   useEffect(() => {
     async function fetchHousehold() {
@@ -87,6 +90,24 @@ function EditProfile() {
       setDebts(data);
     }
     fetchDebts();
+
+    async function fetchFocuses() {
+      const res = await fetch(
+        `https://jointgoals.vercel.app/focuses?precisefp_account_id=${precisefp_account_id}`
+      );
+      const data = await res.json();
+      setFocuses(data);
+    }
+    fetchFocuses();
+
+    async function fetchOpportunities() {
+      const res = await fetch(
+        `https://jointgoals.vercel.app/opportunities?precisefp_account_id=${precisefp_account_id}`
+      );
+      const data = await res.json();
+      setOpportunities(data);
+    }
+    fetchOpportunities();
   }, [precisefp_account_id]);
 
   return (
@@ -337,13 +358,20 @@ function EditProfile() {
               <Col className="col-2">
                 <Button
                   onClick={() =>
-                    setHousehold({
-                      ...household,
-                      children: [
-                        ...household.children.slice(0, i),
-                        ...household.children.slice(i + 1),
-                      ],
-                    })
+                    fetch(
+                      `https://jointgoals.vercel.app/child?child_id=${child.id}`,
+                      {
+                        method: "DELETE",
+                      }
+                    ).then(
+                      setHousehold({
+                        ...household,
+                        children: [
+                          ...household.children.slice(0, i),
+                          ...household.children.slice(i + 1),
+                        ],
+                      })
+                    )
                   }
                 >
                   Delete Child
@@ -354,12 +382,18 @@ function EditProfile() {
         })}
         <div style={{ marginLeft: "auto" }}>
           <Button
-            onClick={() =>
+            onClick={async () =>
               setHousehold({
                 ...household,
                 children: [
                   ...household.children,
-                  { first_name: "", last_name: "", age: 0, sex: "Female" },
+                  {
+                    precisefp_account_id,
+                    first_name: "",
+                    last_name: "",
+                    age: 0,
+                    sex: "Female",
+                  },
                 ],
               })
             }
@@ -469,10 +503,19 @@ function EditProfile() {
               <Col className="col-2">
                 <Button
                   onClick={() =>
-                    setFinancialGoals([
-                      ...financialGoals.slice(0, i),
-                      ...financialGoals.slice(i + 1),
-                    ])
+                    fetch(`https://jointgoals.vercel.app/financial-goals`, {
+                      method: "DELETE",
+                      headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify(goal),
+                    }).then(
+                      setFinancialGoals([
+                        ...financialGoals.slice(0, i),
+                        ...financialGoals.slice(i + 1),
+                      ])
+                    )
                   }
                 >
                   Delete Goal
@@ -555,10 +598,19 @@ function EditProfile() {
               <Col className="col-2">
                 <Button
                   onClick={() =>
-                    setLifeGoals([
-                      ...lifeGoals.slice(0, i),
-                      ...lifeGoals.slice(i + 1),
-                    ])
+                    fetch(`https://jointgoals.vercel.app/life-goals`, {
+                      method: "DELETE",
+                      headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify(goal),
+                    }).then(
+                      setLifeGoals([
+                        ...lifeGoals.slice(0, i),
+                        ...lifeGoals.slice(i + 1),
+                      ])
+                    )
                   }
                 >
                   Delete Goal
@@ -662,10 +714,19 @@ function EditProfile() {
               <Col className="col-2">
                 <Button
                   onClick={() =>
-                    setIncomes([
-                      ...incomes.slice(0, i),
-                      ...incomes.slice(i + 1),
-                    ])
+                    fetch(`https://jointgoals.vercel.app/incomes`, {
+                      method: "DELETE",
+                      headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify(income),
+                    }).then(
+                      setIncomes([
+                        ...incomes.slice(0, i),
+                        ...incomes.slice(i + 1),
+                      ])
+                    )
                   }
                 >
                   Delete Income
@@ -927,10 +988,19 @@ function EditProfile() {
               <Col className="col-2">
                 <Button
                   onClick={() =>
-                    setIncomes([
-                      ...incomes.slice(0, i),
-                      ...incomes.slice(i + 1),
-                    ])
+                    fetch(`https://jointgoals.vercel.app/real-estate`, {
+                      method: "DELETE",
+                      headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify(place),
+                    }).then(
+                      setIncomes([
+                        ...realEstate.slice(0, i),
+                        ...realEstate.slice(i + 1),
+                      ])
+                    )
                   }
                 >
                   Delete Place
@@ -1184,26 +1254,20 @@ function EditProfile() {
               </Stack>
               <Col className="col-2">
                 <Button
-                  onClick={async () => {
-                    const response = await fetch(
-                      `https://jointgoals.vercel.app/savings`,
-                      {
-                        method: "DELETE",
-                        headers: {
-                          Accept: "application/json",
-                          "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify(saving),
-                      }
-                    );
-                    if (response.status === "200") {
+                  onClick={() => {
+                    fetch(`https://jointgoals.vercel.app/savings`, {
+                      method: "DELETE",
+                      headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify(saving),
+                    }).then(
                       setSavings([
                         ...savings.slice(0, i),
                         ...savings.slice(i + 1),
-                      ]);
-                    } else {
-                      console.error(response)
-                    }
+                      ])
+                    );
                   }}
                 >
                   Delete Saving
@@ -1536,7 +1600,14 @@ function EditProfile() {
               <Col className="col-2">
                 <Button
                   onClick={() =>
-                    setDebts([...debts.slice(0, i), ...debts.slice(i + 1)])
+                    fetch(
+                      `https://jointgoals.vercel.app/debt-id?debt_id=${debt.id}`,
+                      {
+                        method: "DELETE",
+                      }
+                    ).then(
+                      setDebts([...debts.slice(0, i), ...debts.slice(i + 1)])
+                    )
                   }
                 >
                   Delete Debt
@@ -1604,6 +1675,116 @@ function EditProfile() {
         </Row>
       </Stack>
       <TopJointGoals precisefp_account_id={precisefp_account_id} />
+      <Stack gap={3} className="p-3 my-2" style={{ border: "1px solid black" }}>
+        <h2>Action Plan Focus</h2>
+        {focuses?.map((focus, i) => {
+          return (
+            <EditBox
+              key={`focus${i}`}
+              path="focuses"
+              item={focus}
+              itemKey="statement"
+              deleteItem={() =>
+                setFocuses([...focuses.slice(0, i), ...focuses.slice(i + 1)])
+              }
+              setItem={(newFocus) =>
+                setFocuses([
+                  ...focuses.slice(0, i),
+                  newFocus,
+                  ...focuses.slice(i + 1),
+                ])
+              }
+            />
+          );
+        })}
+        <div style={{ marginLeft: "auto" }}>
+          <Button
+            onClick={async () => {
+              const response = await fetch(
+                `https://jointgoals.vercel.app/focuses`,
+                {
+                  method: "PUT",
+                  headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify([
+                    ...focuses,
+                    {
+                      precisefp_account_id,
+                      statement: "EDIT THIS STATEMENT",
+                      index: focuses.length,
+                    },
+                  ]),
+                }
+              );
+              if (response.status === 200) {
+                setFocuses(await response.json());
+              } else {
+                console.log(response);
+              }
+            }}
+            style={{ paddingBottom: "10px" }}
+          >
+            Add Focus
+          </Button>
+        </div>
+      </Stack>
+      <Stack gap={3} className="p-3 my-2" style={{ border: "1px solid black" }}>
+        <h2>Areas of Opportunity</h2>
+        {opportunities?.map((opportunity, i) => {
+          return (
+            <EditBox
+              key={`opportunity${i}`}
+              path="opportunities"
+              item={opportunity}
+              itemKey="statement"
+              deleteItem={() =>
+                setOpportunities([...opportunities.slice(0, i), ...opportunities.slice(i + 1)])
+              }
+              setItem={(newOpportunity) =>
+                setOpportunities([
+                  ...opportunities.slice(0, i),
+                  newOpportunity,
+                  ...opportunities.slice(i + 1),
+                ])
+              }
+            />
+          );
+        })}
+        <div style={{ marginLeft: "auto" }}>
+          <Button
+            onClick={async () => {
+              const response = await fetch(
+                `https://jointgoals.vercel.app/opportunities`,
+                {
+                  method: "PUT",
+                  headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify([
+                    ...opportunities,
+                    {
+                      precisefp_account_id,
+                      statement: "EDIT THIS STATEMENT",
+                      index: opportunities.length,
+                    },
+                  ]),
+                }
+              );
+              if (response.status === 200) {
+                setOpportunities(await response.json());
+              } else {
+                console.log(response);
+              }
+            }}
+            style={{ paddingBottom: "10px" }}
+          >
+            Add Opportunity
+          </Button>
+        </div>
+      </Stack>
     </div>
   );
 }
