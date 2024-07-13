@@ -16,7 +16,7 @@ const TopJointGoalSummary = ({
     async function fetchGoalWhats() {
       const resGoalWhats = await fetch(
         // `https://jointgoals.vercel.app/goal-whats?precisefp_account_id=${precisefp_account_id}&goal_index=${goal.index}`
-        `http://localhost:8000/goal-whats?precisefp_account_id=${precisefp_account_id}&goal_index=${goal.index}`
+        `https://jointgoals.vercel.app/goal-whats?precisefp_account_id=${precisefp_account_id}&goal_index=${goal.index}`
       );
       const dataGoalWhats = await resGoalWhats.json();
       setGoalWhats(dataGoalWhats);
@@ -25,7 +25,7 @@ const TopJointGoalSummary = ({
 
     async function fetchActionResults() {
       const resActionResults = await fetch(
-        `http://localhost:8000/goal-action-results?precisefp_account_id=${precisefp_account_id}&goal_index=${goal.index}`
+        `https://jointgoals.vercel.app/goal-action-results?precisefp_account_id=${precisefp_account_id}&goal_index=${goal.index}`
       );
       const dataActionResults = await resActionResults.json();
       setActionResults(dataActionResults);
@@ -191,7 +191,7 @@ const TopJointGoalSummary = ({
               onClick={async () => {
                 const response = await fetch(
                   // `https://jointgoals.vercel.app/goal-action-results`,
-                  `http://localhost:8000/goal-action-results`,
+                  `https://jointgoals.vercel.app/goal-action-results`,
                   {
                     method: "PUT",
                     headers: {
