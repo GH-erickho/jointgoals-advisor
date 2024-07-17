@@ -37,8 +37,16 @@ function App() {
               }
             />
             <Route />
-            <Route
+            {/* <Route
               path="/edit-profile/:precisefp_account_id"
+              element={
+                <RequireAuth>
+                  <EditProfile />
+                </RequireAuth>
+              }
+            /> */}
+            <Route
+              path="/edit-profile/:email"
               element={
                 <RequireAuth>
                   <EditProfile />

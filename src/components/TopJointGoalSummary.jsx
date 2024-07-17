@@ -4,7 +4,7 @@ import EditBox from "../EditBox";
 import { Plus } from "react-bootstrap-icons";
 
 const TopJointGoalSummary = ({
-  precisefp_account_id,
+  email,
   goal,
   deleteTopJointGoal,
   setTopJointGoal,
@@ -15,8 +15,7 @@ const TopJointGoalSummary = ({
   useEffect(() => {
     async function fetchGoalWhats() {
       const resGoalWhats = await fetch(
-        // `https://jointgoals.vercel.app/goal-whats?precisefp_account_id=${precisefp_account_id}&goal_index=${goal.index}`
-        `https://jointgoals.vercel.app/goal-whats?precisefp_account_id=${precisefp_account_id}&goal_index=${goal.index}`
+        `https://jointgoals.vercel.app/goal-whats?email=${email}&goal_index=${goal.index}`
       );
       const dataGoalWhats = await resGoalWhats.json();
       setGoalWhats(dataGoalWhats);
@@ -25,13 +24,13 @@ const TopJointGoalSummary = ({
 
     async function fetchActionResults() {
       const resActionResults = await fetch(
-        `https://jointgoals.vercel.app/goal-action-results?precisefp_account_id=${precisefp_account_id}&goal_index=${goal.index}`
+        `https://jointgoals.vercel.app/goal-action-results?email=${email}&goal_index=${goal.index}`
       );
       const dataActionResults = await resActionResults.json();
       setActionResults(dataActionResults);
     }
     fetchActionResults();
-  }, [precisefp_account_id]);
+  }, [email, goal.index]);
 
   return (
     <Stack gap={3}>
@@ -62,11 +61,11 @@ const TopJointGoalSummary = ({
                     Accept: "application/json",
                     "Content-Type": "application/json",
                   },
-                  body: JSON.stringify(item),
+                  body: JSON.stringify(goal),
                 }
               );
               if (response.status === 200) {
-                deleteItem();
+                deleteTopJointGoal();
               } else {
                 console.log(response);
               }
@@ -123,7 +122,7 @@ const TopJointGoalSummary = ({
                     body: JSON.stringify([
                       ...goalWhats,
                       {
-                        precisefp_account_id: parseInt(precisefp_account_id),
+                        email,
                         goal_id: goal.id,
                         goal_index: goal.index + 1,
                         statement: "EDIT THIS STATEMENT",
@@ -201,7 +200,7 @@ const TopJointGoalSummary = ({
                     body: JSON.stringify([
                       ...actionResults,
                       {
-                        precisefp_account_id: parseInt(precisefp_account_id),
+                        email,
                         goal_id: goal.id,
                         goal_index: goal.index,
                         index: actionResults.length + 1,

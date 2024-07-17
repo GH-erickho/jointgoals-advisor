@@ -5,7 +5,7 @@ import TopJointGoals from "./TopJointGoals";
 import EditBox from "../EditBox";
 
 function EditProfile() {
-  const { precisefp_account_id } = useParams();
+  const { email } = useParams();
 
   const [household, setHousehold] = useState({});
   const [financialGoals, setFinancialGoals] = useState([]);
@@ -21,7 +21,7 @@ function EditProfile() {
   useEffect(() => {
     async function fetchHousehold() {
       const res = await fetch(
-        `https://jointgoals.vercel.app/household?precisefp_account_id=${precisefp_account_id}`
+        `https://jointgoals.vercel.app/household?email=${email}`
       );
       const data = await res.json();
       setHousehold(data);
@@ -30,7 +30,7 @@ function EditProfile() {
 
     async function fetchFinancialGoals() {
       const res = await fetch(
-        `https://jointgoals.vercel.app/financial-goals?precisefp_account_id=${precisefp_account_id}`
+        `https://jointgoals.vercel.app/financial-goals?email=${email}`
       );
       const data = await res.json();
       setFinancialGoals(data);
@@ -39,7 +39,7 @@ function EditProfile() {
 
     async function fetchLifeGoals() {
       const res = await fetch(
-        `https://jointgoals.vercel.app/life-goals?precisefp_account_id=${precisefp_account_id}`
+        `https://jointgoals.vercel.app/life-goals?email=${email}`
       );
       const data = await res.json();
       setLifeGoals(data);
@@ -48,7 +48,7 @@ function EditProfile() {
 
     async function fetchIncomes() {
       const res = await fetch(
-        `https://jointgoals.vercel.app/incomes?precisefp_account_id=${precisefp_account_id}`
+        `https://jointgoals.vercel.app/incomes?email=${email}`
       );
       const data = await res.json();
       setIncomes(data);
@@ -57,7 +57,7 @@ function EditProfile() {
 
     async function fetchRealEstate() {
       const res = await fetch(
-        `https://jointgoals.vercel.app/real-estate?precisefp_account_id=${precisefp_account_id}`
+        `https://jointgoals.vercel.app/real-estate?email=${email}`
       );
       const data = await res.json();
       setRealEstate(data);
@@ -66,7 +66,7 @@ function EditProfile() {
 
     async function fetchSavings() {
       const res = await fetch(
-        `https://jointgoals.vercel.app/savings?precisefp_account_id=${precisefp_account_id}`
+        `https://jointgoals.vercel.app/savings?email=${email}`
       );
       const data = await res.json();
       setSavings(data);
@@ -75,7 +75,7 @@ function EditProfile() {
 
     async function fetchExpenses() {
       const res = await fetch(
-        `https://jointgoals.vercel.app/expense?precisefp_account_id=${precisefp_account_id}`
+        `https://jointgoals.vercel.app/expense?email=${email}`
       );
       const data = await res.json();
       setExpense(data);
@@ -84,7 +84,7 @@ function EditProfile() {
 
     async function fetchDebts() {
       const res = await fetch(
-        `https://jointgoals.vercel.app/debts?precisefp_account_id=${precisefp_account_id}`
+        `https://jointgoals.vercel.app/debts?email=${email}`
       );
       const data = await res.json();
       setDebts(data);
@@ -93,7 +93,7 @@ function EditProfile() {
 
     async function fetchFocuses() {
       const res = await fetch(
-        `https://jointgoals.vercel.app/focuses?precisefp_account_id=${precisefp_account_id}`
+        `https://jointgoals.vercel.app/focuses?email=${email}`
       );
       const data = await res.json();
       setFocuses(data);
@@ -102,13 +102,13 @@ function EditProfile() {
 
     async function fetchOpportunities() {
       const res = await fetch(
-        `https://jointgoals.vercel.app/opportunities?precisefp_account_id=${precisefp_account_id}`
+        `https://jointgoals.vercel.app/opportunities?email=${email}`
       );
       const data = await res.json();
       setOpportunities(data);
     }
     fetchOpportunities();
-  }, [precisefp_account_id]);
+  }, [email]);
 
   return (
     <div style={{ textAlign: "left" }}>
@@ -388,7 +388,7 @@ function EditProfile() {
                 children: [
                   ...household.children,
                   {
-                    precisefp_account_id,
+                    email,
                     first_name: "",
                     last_name: "",
                     age: 0,
@@ -414,7 +414,7 @@ function EditProfile() {
               className="w-100"
               onClick={async () => {
                 const res = await fetch(
-                  `https://jointgoals.vercel.app/household?precisefp_account_id=${precisefp_account_id}`
+                  `https://jointgoals.vercel.app/household?email=${email}`
                 );
                 const data = await res.json();
                 setHousehold(data);
@@ -529,7 +529,7 @@ function EditProfile() {
             onClick={() =>
               setFinancialGoals([
                 ...financialGoals,
-                { name: "", amount: 0, due_date: "", precisefp_account_id },
+                { name: "", amount: 0, due_date: "", email },
               ])
             }
           >
@@ -549,7 +549,7 @@ function EditProfile() {
               className="w-100"
               onClick={async () => {
                 const res = await fetch(
-                  `https://jointgoals.vercel.app/financial-goals?precisefp_account_id=${precisefp_account_id}`
+                  `https://jointgoals.vercel.app/financial-goals?email=${email}`
                 );
                 const data = await res.json();
                 setFinancialGoals(data);
@@ -624,7 +624,7 @@ function EditProfile() {
             onClick={() =>
               setLifeGoals([
                 ...lifeGoals,
-                { statement: "", precisefp_account_id },
+                { statement: "", email },
               ])
             }
           >
@@ -644,7 +644,7 @@ function EditProfile() {
               className="w-100"
               onClick={async () => {
                 const res = await fetch(
-                  `https://jointgoals.vercel.app/life-goals?precisefp_account_id=${precisefp_account_id}`
+                  `https://jointgoals.vercel.app/life-goals?email=${email}`
                 );
                 const data = await res.json();
                 setLifeGoals(data);
@@ -740,7 +740,7 @@ function EditProfile() {
             onClick={() =>
               setIncomes([
                 ...incomes,
-                { name: "", amount: 0, precisefp_account_id },
+                { name: "", amount: 0, email },
               ])
             }
           >
@@ -760,7 +760,7 @@ function EditProfile() {
               className="w-100"
               onClick={async () => {
                 const res = await fetch(
-                  `https://jointgoals.vercel.app/incomes?precisefp_account_id=${precisefp_account_id}`
+                  `https://jointgoals.vercel.app/incomes?email=${email}`
                 );
                 const data = await res.json();
                 setIncomes(data);
@@ -1023,7 +1023,7 @@ function EditProfile() {
                   monthly_payment: 0,
                   interest_rate: 0,
                   duration: 0,
-                  precisefp_account_id,
+                  email,
                 },
               ])
             }
@@ -1044,7 +1044,7 @@ function EditProfile() {
               className="w-100"
               onClick={async () => {
                 const res = await fetch(
-                  `https://jointgoals.vercel.app/real-estate?precisefp_account_id=${precisefp_account_id}`
+                  `https://jointgoals.vercel.app/real-estate?email=${email}`
                 );
                 const data = await res.json();
                 setRealEstate(data);
@@ -1282,7 +1282,7 @@ function EditProfile() {
               setSavings([
                 ...savings,
                 {
-                  precisefp_account_id,
+                  email,
                   type: "Checking",
                   name: "",
                   location: "",
@@ -1308,7 +1308,7 @@ function EditProfile() {
               className="w-100"
               onClick={async () => {
                 const res = await fetch(
-                  `https://jointgoals.vercel.app/savings?precisefp_account_id=${precisefp_account_id}`
+                  `https://jointgoals.vercel.app/savings?email=${email}`
                 );
                 const data = await res.json();
                 setSavings(data);
@@ -1412,7 +1412,7 @@ function EditProfile() {
               className="w-100"
               onClick={async () => {
                 const res = await fetch(
-                  `https://jointgoals.vercel.app/expense?precisefp_account_id=${precisefp_account_id}`
+                  `https://jointgoals.vercel.app/expense?email=${email}`
                 );
                 const data = await res.json();
                 setExpense(data);
@@ -1622,7 +1622,7 @@ function EditProfile() {
               setDebts([
                 ...debts,
                 {
-                  precisefp_account_id,
+                  email,
                   name: "",
                   type: "Other",
                   balance: 0,
@@ -1648,7 +1648,7 @@ function EditProfile() {
               className="w-100"
               onClick={async () => {
                 const res = await fetch(
-                  `https://jointgoals.vercel.app/debts?precisefp_account_id=${precisefp_account_id}`
+                  `https://jointgoals.vercel.app/debts?email=${email}`
                 );
                 const data = await res.json();
                 setDebts(data);
@@ -1674,7 +1674,7 @@ function EditProfile() {
           </div>
         </Row>
       </Stack>
-      <TopJointGoals precisefp_account_id={precisefp_account_id} />
+      <TopJointGoals email={email} />
       <Stack gap={3} className="p-3 my-2" style={{ border: "1px solid black" }}>
         <h2>Action Plan Focus</h2>
         {focuses?.map((focus, i) => {
@@ -1711,7 +1711,7 @@ function EditProfile() {
                   body: JSON.stringify([
                     ...focuses,
                     {
-                      precisefp_account_id,
+                      email,
                       statement: "EDIT THIS STATEMENT",
                       index: focuses.length,
                     },
@@ -1766,7 +1766,7 @@ function EditProfile() {
                   body: JSON.stringify([
                     ...opportunities,
                     {
-                      precisefp_account_id,
+                      email,
                       statement: "EDIT THIS STATEMENT",
                       index: opportunities.length,
                     },

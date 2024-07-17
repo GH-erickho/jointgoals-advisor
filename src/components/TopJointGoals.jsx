@@ -2,19 +2,19 @@ import { useEffect, useState } from "react";
 import { Stack } from "react-bootstrap";
 import TopJointGoalSummary from "./TopJointGoalSummary";
 
-function TopJointGoals({ precisefp_account_id }) {
+function TopJointGoals({ email }) {
   const [topJointGoals, setTopJointGoals] = useState([]);
 
   useEffect(() => {
     async function fetchTopJointGoals() {
       const resTopJointGoals = await fetch(
-        `https://jointgoals.vercel.app/top-joint-goals?precisefp_account_id=${precisefp_account_id}`
+        `https://jointgoals.vercel.app/top-joint-goals?email=${email}`
       );
       const dataTopJointGoals = await resTopJointGoals.json();
       setTopJointGoals(dataTopJointGoals);
     }
     fetchTopJointGoals();
-  }, [precisefp_account_id]);
+  }, [email]);
 
   return (
     <Stack gap={3} className="p-3 my-2" style={{ border: "1px solid black" }}>
@@ -23,7 +23,7 @@ function TopJointGoals({ precisefp_account_id }) {
         return (
           <TopJointGoalSummary
             key={`topJointGoal${i}`}
-            precisefp_account_id={precisefp_account_id}
+            email={email}
             goal={goal}
             deleteTopJointGoal={() =>
               setTopJointGoals([
