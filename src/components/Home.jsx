@@ -17,7 +17,7 @@ function Home() {
     <Table striped bordered hover>
       <thead>
         <tr>
-          <th>PreciseFP Account ID</th>
+          <th>Email</th>
           <th>First Name</th>
           <th>Last Name</th>
           <th>Sex</th>
@@ -34,8 +34,8 @@ function Home() {
           return (
             <tr key={couple + i}>
               <td>
-                <Link to={`/edit-profile/${couple.precisefp_account_id}`}>
-                  {couple.precisefp_account_id}
+                <Link to={`/edit-profile/${couple.email}`}>
+                  {couple.email}
                 </Link>
               </td>
               <td>{couple.first_name}</td>
